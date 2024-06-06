@@ -3,6 +3,62 @@
   grid-template-columns: repeat(4, 80px);
   grid-template-rows: repeat(4, 80px);
   gap: 5px;
+  position: relative;
+  justify-items: center;
+  margin-top: 20px;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  width: 100%;
+  max-width: 600px;
+  margin-bottom: 20px;
+  position: relative;
+}
+
+.title {
+  font-size: 64px;
+  font-weight: bold;
+  color: #776e65;
+  margin-bottom: 20px;
+  margin-right: 20px;
+}
+
+.scores {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.scoreBox {
+  background-color: #bbada0;
+  padding: 20px;
+  border-radius: 5px;
+  color: #f9f6f2;
+  font-size: 20px;
+  font-weight: bold;
+  text-align: center;
+}
+
+.scoreBox .label {
+  font-size: 12px;
+  text-transform: uppercase;
+}
+
+.newGameButton {
+  background-color: #8f7a66;
+  color: #f9f6f2;
+  border: none;
+  padding: 10px 20px;
+  font-size: 18px;
+  font-weight: bold;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 10px;
+  align-self: flex-end; /* Align to the right */
 }
 
 .row {

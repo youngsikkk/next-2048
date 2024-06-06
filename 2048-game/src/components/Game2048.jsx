@@ -172,11 +172,24 @@ const Game2048 = () => {
       window.removeEventListener('keydown', handleKeyDown);
     };
   }, [board, gameOver]);
+
   return (
-    <>
-      <div>
-        <div className={styles.highScore}>High Score: {highScore}</div>
-        <div className={styles.score}>Score: {score}</div>
+    <div>
+      <div className={styles.header}>
+        <div style={{display:"flex"}}>
+          <div className={styles.title}>2048</div>
+          <div className={styles.scores}>
+            <div className={styles.scoreBox}>
+              <div className="label">Score</div>
+              <div>{score}</div>
+            </div>
+            <div className={styles.scoreBox}>
+              <div className="label">Best</div>
+              <div>{highScore}</div>
+            </div>
+          </div>
+        </div>
+        <button onClick={initializeGame} className={styles.newGameButton}>New Game</button>
       </div>
       <div className={styles.gameContainer}>
         {board.map((row, rowIndex) => (
@@ -188,16 +201,15 @@ const Game2048 = () => {
             ))}
           </div>
         ))}
-         {gameOver && (
-        <div className={styles.gameOver}>
-          <div>Game Over</div>
-          <button onClick={initializeGame} className={styles.retryButton}>Retry</button>
-        </div>
-      )}
+        {gameOver && (
+          <div className={styles.gameOver}>
+            <div>Game Over</div>
+            <button onClick={initializeGame} className={styles.retryButton}>Retry</button>
+          </div>
+        )}
       </div>
-    </>
+    </div>
   );
 };
 
 export default Game2048;
-

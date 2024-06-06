@@ -12,14 +12,6 @@ export default function Home() {
       </Head>
 
       <main className={styles.main}>
-        <h1 className={styles.title}>
-          Welcome to 2048 Game!
-        </h1>
-
-        <p className={styles.description}>
-          Let's play and have fun!
-        </p>
-
         <Game2048 />
       </main>
     </div>
