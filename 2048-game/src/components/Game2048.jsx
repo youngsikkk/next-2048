@@ -7,9 +7,11 @@ const Game2048 = () => {
     [0, 0, 0, 0],
     [0, 0, 0, 0],
     [0, 0, 0, 0],
+    [0, 0, 0, 0],
   ]);
   const [score, setScore] = useState(0);
   const [highScore, setHighScore] = useState(0);
+  const [gameOver, setGameOver] = useState(false);
 
   useEffect(() => {
     const savedHighScore = localStorage.getItem('highScore');
@@ -64,6 +66,7 @@ const Game2048 = () => {
     }
     setBoard(newBoard);
     setScore(0);
+    setGameOver(false);
   };
 
   const moveLeft = (board) => {
@@ -120,7 +123,25 @@ const Game2048 = () => {
     return transpose(movedBoard);
   };
 
+  const isGameOver = (board) => {
+    const canMove = (board) => {
+      for (let row = 0; row < 4; row++) {
+        for (let col = 0; col < 4; col++) {
+          if (board[row][col] === 0) return true;
+          if (col < 3 && board[row][col] === board[row][col + 1]) return true;
+          if (row < 3 && board[row][col] === board[row + 1][col]) return true;
+        }
+      }
+      return false;
+    };
+    if (!canMove(board)) {
+      setGameOver(true);
+    }
+  };
+
   const handleKeyDown = (event) => {
+    if (gameOver) return;
+
     let newBoard;
     switch (event.key) {
       case 'ArrowLeft':
@@ -139,7 +160,9 @@ const Game2048 = () => {
         return;
     }
     if (JSON.stringify(newBoard) !== JSON.stringify(board)) {
-      setBoard(addRandomNumber(newBoard));
+      const updatedBoard = addRandomNumber(newBoard);
+      setBoard(updatedBoard);
+      isGameOver(updatedBoard);
     }
   };
 
@@ -148,8 +171,7 @@ const Game2048 = () => {
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
     };
-  }, [board]);
-
+  }, [board, gameOver]);
   return (
     <>
       <div>
@@ -166,6 +188,12 @@ const Game2048 = () => {
             ))}
           </div>
         ))}
+         {gameOver && (
+        <div className={styles.gameOver}>
+          <div>Game Over</div>
+          <button onClick={initializeGame} className={styles.retryButton}>Retry</button>
+        </div>
+      )}
       </div>
     </>
   );
