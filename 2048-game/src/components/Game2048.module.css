@@ -1,0 +1,49 @@
+.gameContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.row {
+  display: flex;
+}
+
+.cell {
+  width: 80px;
+  height: 80px;
+  margin: 5px;
+  background: #eee;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 24px;
+  font-weight: bold;
+  color: #333;
+  transition: transform 2s ease-in-out;
+}
+
+.cell-2 {
+  background-color: #eee4da;
+}
+
+.cell-4 {
+  background-color: #ede0c8;
+}
+.cell-8 {
+  background-color: #ede0c8;
+}
+.cell-16 {
+  background-color: #ede0c8;
+}
+.cell-32 {
+  background-color: #ede0c8;
+}
+.cell-64 {
+  background-color: #ede0c8;
+}
+.cell-128 {
+  background-color: #ede0c8;
+}
+
+/* 추가적으로 다른 숫자들의 스타일을 여기에 추가할 수 있습니다. */
