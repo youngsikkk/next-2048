@@ -1,4 +1,5 @@
 "use client"
+"use client"
 import React, { useState, useEffect } from 'react';
 import styles from './Game2048.module.css';
 
@@ -20,23 +21,17 @@ const Game2048 = () => {
       });
     });
 
-    console.log('Empty Cells:', emptyCells);
-
     if (emptyCells.length === 0) return board;
 
     const randomIndex = Math.floor(Math.random() * emptyCells.length);
     const { row, col } = emptyCells[randomIndex];
     const newNumber = Math.random() < 0.9 ? 2 : 4;
 
-    console.log(`Adding number ${newNumber} at position (${row}, ${col})`);
-
     const newBoard = board.map((boardRow, rowIndex) =>
       boardRow.map((cell, cellIndex) =>
         rowIndex === row && cellIndex === col ? newNumber : cell
       )
     );
-
-    console.log('New Board:', newBoard);
 
     return newBoard;
   };
@@ -49,13 +44,10 @@ const Game2048 = () => {
       [0, 0, 0, 0],
     ];
     const initialNumbers = Math.floor(Math.random() * 3) + 1; // 1에서 3 사이의 숫자
-    console.log(`Initial Numbers: ${initialNumbers}`);
     for (let i = 0; i < initialNumbers; i++) {
       newBoard = addRandomNumber(newBoard);
-      console.log(`Board after ${i + 1} addition:`, newBoard);
     }
     setBoard(newBoard);
-    console.log('Initialized Board:', newBoard);
   };
 
   const moveLeft = (board) => {
@@ -143,7 +135,7 @@ const Game2048 = () => {
       {board.map((row, rowIndex) => (
         <div key={rowIndex} className={styles.row}>
           {row.map((cell, cellIndex) => (
-            <div key={cellIndex} className={styles.cell}>
+            <div key={cellIndex} className={`${styles.cell} ${cell !== 0 ? styles[`cell-${cell}`] : ''}`}>
               {cell !== 0 && cell}
             </div>
           ))}
