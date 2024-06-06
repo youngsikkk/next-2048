@@ -1,49 +1,92 @@
 .gameContainer {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  display: grid;
+  grid-template-columns: repeat(4, 80px);
+  grid-template-rows: repeat(4, 80px);
+  gap: 5px;
 }
 
 .row {
-  display: flex;
+  display: contents;
 }
 
 .cell {
   width: 80px;
   height: 80px;
-  margin: 5px;
-  background: #eee;
+  background: #cdc1b4;
   display: flex;
   justify-content: center;
   align-items: center;
   font-size: 24px;
   font-weight: bold;
-  color: #333;
-  transition: transform 2s ease-in-out;
+  color: #776e65;
+  border-radius: 5px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s ease-in-out;
 }
 
 .cell-2 {
   background-color: #eee4da;
+  color: #776e65;
 }
 
 .cell-4 {
   background-color: #ede0c8;
-}
-.cell-8 {
-  background-color: #ede0c8;
-}
-.cell-16 {
-  background-color: #ede0c8;
-}
-.cell-32 {
-  background-color: #ede0c8;
-}
-.cell-64 {
-  background-color: #ede0c8;
-}
-.cell-128 {
-  background-color: #ede0c8;
+  color: #776e65;
 }
 
-/* 추가적으로 다른 숫자들의 스타일을 여기에 추가할 수 있습니다. */
+.cell-8 {
+  background-color: #f2b179;
+  color: #f9f6f2;
+}
+
+.cell-16 {
+  background-color: #f59563;
+  color: #f9f6f2;
+}
+
+.cell-32 {
+  background-color: #f67c5f;
+  color: #f9f6f2;
+}
+
+.cell-64 {
+  background-color: #f65e3b;
+  color: #f9f6f2;
+}
+
+.cell-128 {
+  background-color: #edcf72;
+  color: #f9f6f2;
+}
+
+.cell-256 {
+  background-color: #edcc61;
+  color: #f9f6f2;
+}
+
+.cell-512 {
+  background-color: #edc850;
+  color: #f9f6f2;
+}
+
+.cell-1024 {
+  background-color: #edc53f;
+  color: #f9f6f2;
+}
+
+.cell-2048 {
+  background-color: #edc22e;
+  color: #f9f6f2;
+}
+
+.score {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.highScore {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 20px;
+}

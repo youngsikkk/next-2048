@@ -1,5 +1,4 @@
 "use client"
-"use client"
 import React, { useState, useEffect } from 'react';
 import styles from './Game2048.module.css';
 
@@ -8,8 +7,24 @@ const Game2048 = () => {
     [0, 0, 0, 0],
     [0, 0, 0, 0],
     [0, 0, 0, 0],
-    [0, 0, 0, 0],
   ]);
+  const [score, setScore] = useState(0);
+  const [highScore, setHighScore] = useState(0);
+
+  useEffect(() => {
+    const savedHighScore = localStorage.getItem('highScore');
+    if (savedHighScore) {
+      setHighScore(parseInt(savedHighScore, 10));
+    }
+    initializeGame();
+  }, []);
+
+  const saveHighScore = (score) => {
+    if (score > highScore) {
+      setHighScore(score);
+      localStorage.setItem('highScore', score);
+    }
+  };
 
   const addRandomNumber = (board) => {
     const emptyCells = [];
@@ -48,20 +63,25 @@ const Game2048 = () => {
       newBoard = addRandomNumber(newBoard);
     }
     setBoard(newBoard);
+    setScore(0);
   };
 
   const moveLeft = (board) => {
+    let newScore = score;
     const newBoard = board.map((row) => {
       const newRow = row.filter(cell => cell !== 0);
       for (let i = 0; i < newRow.length - 1; i++) {
         if (newRow[i] === newRow[i + 1]) {
           newRow[i] *= 2;
+          newScore += newRow[i];
           newRow[i + 1] = 0;
         }
       }
       const filteredRow = newRow.filter(cell => cell !== 0);
       return [...filteredRow, ...Array(4 - filteredRow.length).fill(0)];
     });
+    setScore(newScore);
+    saveHighScore(newScore);
     return newBoard;
   };
 
@@ -70,17 +90,21 @@ const Game2048 = () => {
   };
 
   const moveRight = (board) => {
+    let newScore = score;
     const newBoard = board.map((row) => {
       const newRow = row.filter(cell => cell !== 0);
       for (let i = newRow.length - 1; i > 0; i--) {
         if (newRow[i] === newRow[i - 1]) {
           newRow[i] *= 2;
+          newScore += newRow[i];
           newRow[i - 1] = 0;
         }
       }
       const filteredRow = newRow.filter(cell => cell !== 0);
       return [...Array(4 - filteredRow.length).fill(0), ...filteredRow];
     });
+    setScore(newScore);
+    saveHighScore(newScore);
     return newBoard;
   };
 
@@ -120,10 +144,6 @@ const Game2048 = () => {
   };
 
   useEffect(() => {
-    initializeGame();
-  }, []);
-
-  useEffect(() => {
     window.addEventListener('keydown', handleKeyDown);
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
@@ -131,18 +151,25 @@ const Game2048 = () => {
   }, [board]);
 
   return (
-    <div className={styles.gameContainer}>
-      {board.map((row, rowIndex) => (
-        <div key={rowIndex} className={styles.row}>
-          {row.map((cell, cellIndex) => (
-            <div key={cellIndex} className={`${styles.cell} ${cell !== 0 ? styles[`cell-${cell}`] : ''}`}>
-              {cell !== 0 && cell}
-            </div>
-          ))}
-        </div>
-      ))}
-    </div>
+    <>
+      <div>
+        <div className={styles.highScore}>High Score: {highScore}</div>
+        <div className={styles.score}>Score: {score}</div>
+      </div>
+      <div className={styles.gameContainer}>
+        {board.map((row, rowIndex) => (
+          <div key={rowIndex} className={styles.row}>
+            {row.map((cell, cellIndex) => (
+              <div key={cellIndex} className={`${styles.cell} ${cell !== 0 ? styles[`cell-${cell}`] : ''}`}>
+                {cell !== 0 && cell}
+              </div>
+            ))}
+          </div>
+        ))}
+      </div>
+    </>
   );
 };
 
 export default Game2048;
+
