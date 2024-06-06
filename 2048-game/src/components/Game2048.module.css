@@ -58,7 +58,7 @@
   border-radius: 5px;
   cursor: pointer;
   margin-top: 10px;
-  align-self: flex-end; /* Align to the right */
+  align-self: flex-end;
 }
 
 .row {
@@ -147,7 +147,8 @@
   margin-bottom: 20px;
 }
 
-.gameOver {
+.gameOver,
+.gameSuccess {
   position: absolute;
   top: 50%;
   left: 50%;
@@ -160,7 +161,9 @@
   z-index: 10;
 }
 
-.retryButton {
+.retryButton,
+.continueButton,
+.newGameSuccessButton {
   margin-top: 10px;
   padding: 10px 20px;
   font-size: 16px;

@@ -1,5 +1,5 @@
 "use client"
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import styles from './Game2048.module.css';
 
 const Game2048 = () => {
@@ -7,11 +7,12 @@ const Game2048 = () => {
     [0, 0, 0, 0],
     [0, 0, 0, 0],
     [0, 0, 0, 0],
-    [0, 0, 0, 0],
   ]);
   const [score, setScore] = useState(0);
   const [highScore, setHighScore] = useState(0);
   const [gameOver, setGameOver] = useState(false);
+  const [gameSuccess, setGameSuccess] = useState(false);
+  const successAcknowledged = useRef(false);
 
   useEffect(() => {
     const savedHighScore = localStorage.getItem('highScore');
@@ -67,6 +68,19 @@ const Game2048 = () => {
     setBoard(newBoard);
     setScore(0);
     setGameOver(false);
+    setGameSuccess(false);
+    successAcknowledged.current = false;
+  };
+
+  const checkFor2048 = (board) => {
+    for (let row of board) {
+      if (row.includes(2048) && !successAcknowledged.current) {
+        setGameSuccess(true);
+        successAcknowledged.current = true;
+        return true;
+      }
+    }
+    return false;
   };
 
   const moveLeft = (board) => {
@@ -85,6 +99,7 @@ const Game2048 = () => {
     });
     setScore(newScore);
     saveHighScore(newScore);
+    checkFor2048(newBoard);
     return newBoard;
   };
 
@@ -108,6 +123,7 @@ const Game2048 = () => {
     });
     setScore(newScore);
     saveHighScore(newScore);
+    checkFor2048(newBoard);
     return newBoard;
   };
 
@@ -140,7 +156,7 @@ const Game2048 = () => {
   };
 
   const handleKeyDown = (event) => {
-    if (gameOver) return;
+    if (gameOver || gameSuccess) return;
 
     let newBoard;
     switch (event.key) {
@@ -171,7 +187,7 @@ const Game2048 = () => {
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
     };
-  }, [board, gameOver]);
+  }, [board, gameOver, gameSuccess]);
 
   return (
     <div>
@@ -205,6 +221,13 @@ const Game2048 = () => {
           <div className={styles.gameOver}>
             <div>Game Over</div>
             <button onClick={initializeGame} className={styles.retryButton}>Retry</button>
+          </div>
+        )}
+        {gameSuccess && (
+          <div className={styles.gameSuccess}>
+            <div>Congratulations! You made 2048!</div>
+            <button onClick={initializeGame} className={styles.newGameSuccessButton}>New Game</button>
+            <button onClick={() => setGameSuccess(false)} className={styles.continueButton}>Continue</button>
           </div>
         )}
       </div>
