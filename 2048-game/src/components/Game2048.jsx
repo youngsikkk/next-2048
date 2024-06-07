@@ -211,66 +211,86 @@ const Game2048 = () => {
     };
   }, [board, gameOver, gameSuccess]);
 
+  useEffect(() => {
+    const emailLink = document.getElementById('email-link');
+    emailLink.href = 'mailto:' + 'hys7309.dev' + '@' + 'gmail.com';
+    emailLink.innerText = 'hys7309.dev' + '@' + 'gmail.com';
+  }, []);
+
   return (
-    <div>
-      <div className={styles.header}>
-        <div style={{display:"flex", position: "relative"}}>
-          <div className={styles.title}>2048</div>
-          <div className={styles.scores}>
-            <div className={styles.scoreBox}>
-              <div className="label">Score</div>
-              <div>
-                {scoreDelta !== 0 && showScoreDelta && (
-                  <span className={styles.scoreDelta}>+{scoreDelta}</span>
-                )}
-              </div>
-              <div>
-                {score}
+    <>
+      <div>
+        <div>
+          <div className={styles.header}>
+            <div style={{display:"flex", position: "relative"}}>
+              <div className={styles.title}>2048</div>
+              <div className={styles.scores}>
+                <div className={styles.scoreBox}>
+                  <div className="label">Score</div>
+                  <div>
+                    {scoreDelta !== 0 && showScoreDelta && (
+                      <span className={styles.scoreDelta}>+{scoreDelta}</span>
+                    )}
+                  </div>
+                  <div>
+                    {score}
+                  </div>
+                </div>
+                <div className={styles.scoreBox}>
+                  <div className="label">Best</div>
+                  <div>{highScore}</div>
+                </div>
               </div>
             </div>
-            <div className={styles.scoreBox}>
-              <div className="label">Best</div>
-              <div>{highScore}</div>
-            </div>
+            <button onClick={() => initializeGame(boardSize)} className={styles.newGameButton}>New Game</button>
+            <select onChange={(e) => setBoardSize(parseInt(e.target.value))} value={boardSize} className={styles.sizeSelector}>
+              <option value={4}>4x4</option>
+              <option value={5}>5x5</option>
+              <option value={6}>6x6</option>
+              <option value={7}>7x7</option>
+              <option value={8}>8x8</option>
+            </select>
           </div>
         </div>
-        <button onClick={() => initializeGame(boardSize)} className={styles.newGameButton}>New Game</button>
-        <select onChange={(e) => setBoardSize(parseInt(e.target.value))} value={boardSize} className={styles.sizeSelector}>
-          <option value={4}>4x4</option>
-          <option value={5}>5x5</option>
-          <option value={6}>6x6</option>
-          <option value={7}>7x7</option>
-          <option value={8}>8x8</option>
-        </select>
-      </div>
-      <div className={styles.gameContainer} style={{ 
-        gridTemplateColumns: `repeat(${boardSize}, 80px)`,
-        gridTemplateRows: `repeat(${boardSize}, 80px)`
-      }}>
-        {board.map((row, rowIndex) => (
-          <div key={rowIndex} className={styles.row}>
-            {row.map((cell, cellIndex) => (
-              <div key={cellIndex} className={`${styles.cell} ${cell !== 0 ? styles[`cell-${cell}`] : ''}`}>
-                {cell !== 0 && cell}
+        <div style={{display:"flex"}}>
+          <div className={styles.gameContainer} style={{ 
+            gridTemplateColumns: `repeat(${boardSize}, 80px)`,
+            gridTemplateRows: `repeat(${boardSize}, 80px)`
+          }}>
+            {board.map((row, rowIndex) => (
+              <div key={rowIndex} className={styles.row}>
+                {row.map((cell, cellIndex) => (
+                  <div key={cellIndex} className={`${styles.cell} ${cell !== 0 ? styles[`cell-${cell}`] : ''}`}>
+                    {cell !== 0 && cell}
+                  </div>
+                ))}
               </div>
             ))}
+            {gameOver && (
+              <div className={styles.gameOver}>
+                <div>Game Over</div>
+                <button onClick={() => initializeGame(boardSize)} className={styles.retryButton}>Retry</button>
+              </div>
+            )}
+            {gameSuccess && (
+              <div className={styles.gameSuccess}>
+                <div>Congratulations! You made 2048!</div>
+                <button onClick={() => initializeGame(boardSize)} className={styles.newGameSuccessButton}>New Game</button>
+                <button onClick={() => setGameSuccess(false)} className={styles.continueButton}>Continue</button>
+              </div>
+            )}
           </div>
-        ))}
-        {gameOver && (
-          <div className={styles.gameOver}>
-            <div>Game Over</div>
-            <button onClick={() => initializeGame(boardSize)} className={styles.retryButton}>Retry</button>
-          </div>
-        )}
-        {gameSuccess && (
-          <div className={styles.gameSuccess}>
-            <div>Congratulations! You made 2048!</div>
-            <button onClick={() => initializeGame(boardSize)} className={styles.newGameSuccessButton}>New Game</button>
-            <button onClick={() => setGameSuccess(false)} className={styles.continueButton}>Continue</button>
-          </div>
-        )}
+        </div>
       </div>
-    </div>
+      <div>
+        <div className={styles.feedback}>
+          <p>Enjoy the game and challenge yourself to achieve a high score!</p>
+          <p>
+            If you have any suggestions or feedback, please email us at <a id="email-link" href="#">email</a>.
+          </p>
+        </div>
+      </div>
+    </>
   );
 };
 

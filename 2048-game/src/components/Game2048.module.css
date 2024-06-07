@@ -3,7 +3,7 @@
   gap: 5px;
   position: relative;
   justify-items: center;
-  margin-top: 20px;
+  margin: 20px auto; /* 중앙 정렬을 위해 margin 설정 */
 }
 
 .header {
@@ -191,6 +191,8 @@
   border: none;
   border-radius: 5px;
   cursor: pointer;
+  margin-left: 2px;
+  margin-right: 2px;
 }
 
 .retryButton:hover, .newGameSuccessButton:hover, .continueButton:hover {
@@ -214,4 +216,27 @@
     opacity: 0;
     transform: translateY(-20px);
   }
+}
+
+.feedback {
+  margin-top: 20px;
+  font-size: 14px;
+  text-align: center;
+}
+.feedback::before {
+  content: '';
+  display: block;
+  width: 100%; /* 밑줄 길이 */
+  height: 1px; /* 밑줄 두께 */
+  background: #000; /* 밑줄 색상 */
+  margin: 10px auto 20px auto; /* 중앙 정렬 및 상단 여백 */
+}
+
+.feedback a {
+  color: #3498db;
+  text-decoration: none;
+}
+
+.feedback a:hover {
+  text-decoration: underline;
 }
