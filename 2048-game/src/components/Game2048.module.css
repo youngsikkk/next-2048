@@ -41,11 +41,19 @@
   font-size: 20px;
   font-weight: bold;
   text-align: center;
+  width: 100px;
+  height: 100px;
+  position: relative;
 }
 
 .scoreBox .label {
   font-size: 12px;
   text-transform: uppercase;
+  background: #bbada0;
+  padding: 10px;
+  border-radius: 5px;
+  text-align: center;
+  position: relative;
 }
 
 .newGameButton {
@@ -171,4 +179,27 @@
   border: none;
   border-radius: 5px;
   cursor: pointer;
+}
+
+.retryButton:hover, .newGameSuccessButton:hover, .continueButton:hover {
+  background: #9c8b7a;
+}
+
+.scoreDelta {
+  position: absolute;
+  left: 33%;
+  top:40%;
+  transform: translateX(-50%);
+  animation: fadeMove .7s forwards;
+}
+
+@keyframes fadeMove {
+  0% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
 }

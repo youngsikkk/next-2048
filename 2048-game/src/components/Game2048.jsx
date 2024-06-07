@@ -10,6 +10,8 @@ const Game2048 = () => {
   ]);
   const [score, setScore] = useState(0);
   const [highScore, setHighScore] = useState(0);
+  const [scoreDelta, setScoreDelta] = useState(0);
+  const [showScoreDelta, setShowScoreDelta] = useState(false);
   const [gameOver, setGameOver] = useState(false);
   const [gameSuccess, setGameSuccess] = useState(false);
   const successAcknowledged = useRef(false);
@@ -67,6 +69,8 @@ const Game2048 = () => {
     }
     setBoard(newBoard);
     setScore(0);
+    setScoreDelta(0); // 초기화
+    setShowScoreDelta(false); // 초기화
     setGameOver(false);
     setGameSuccess(false);
     successAcknowledged.current = false;
@@ -85,11 +89,13 @@ const Game2048 = () => {
 
   const moveLeft = (board) => {
     let newScore = score;
+    let delta = 0; // 새로운 변수로 점수 차이를 추적합니다.
     const newBoard = board.map((row) => {
       const newRow = row.filter(cell => cell !== 0);
       for (let i = 0; i < newRow.length - 1; i++) {
         if (newRow[i] === newRow[i + 1]) {
           newRow[i] *= 2;
+          delta += newRow[i]; // 점수 차이에 더합니다.
           newScore += newRow[i];
           newRow[i + 1] = 0;
         }
@@ -98,6 +104,10 @@ const Game2048 = () => {
       return [...filteredRow, ...Array(4 - filteredRow.length).fill(0)];
     });
     setScore(newScore);
+    setScoreDelta(delta); // 상태 업데이트
+    if (delta !== 0) {
+      setShowScoreDelta(true); // 점수 변화 애니메이션 상태 업데이트
+    }
     saveHighScore(newScore);
     checkFor2048(newBoard);
     return newBoard;
@@ -109,11 +119,13 @@ const Game2048 = () => {
 
   const moveRight = (board) => {
     let newScore = score;
+    let delta = 0; // 새로운 변수로 점수 차이를 추적합니다.
     const newBoard = board.map((row) => {
       const newRow = row.filter(cell => cell !== 0);
       for (let i = newRow.length - 1; i > 0; i--) {
         if (newRow[i] === newRow[i - 1]) {
           newRow[i] *= 2;
+          delta += newRow[i]; // 점수 차이에 더합니다.
           newScore += newRow[i];
           newRow[i - 1] = 0;
         }
@@ -122,6 +134,10 @@ const Game2048 = () => {
       return [...Array(4 - filteredRow.length).fill(0), ...filteredRow];
     });
     setScore(newScore);
+    setScoreDelta(delta); // 상태 업데이트
+    if (delta !== 0) {
+      setShowScoreDelta(true); // 점수 변화 애니메이션 상태 업데이트
+    }
     saveHighScore(newScore);
     checkFor2048(newBoard);
     return newBoard;
@@ -183,6 +199,15 @@ const Game2048 = () => {
   };
 
   useEffect(() => {
+    if (showScoreDelta) {
+      const timer = setTimeout(() => {
+        setShowScoreDelta(false);
+      }, 2000); // 2초 후에 애니메이션을 숨깁니다.
+      return () => clearTimeout(timer);
+    }
+  }, [showScoreDelta]);
+
+  useEffect(() => {
     window.addEventListener('keydown', handleKeyDown);
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
@@ -192,12 +217,19 @@ const Game2048 = () => {
   return (
     <div>
       <div className={styles.header}>
-        <div style={{display:"flex"}}>
+        <div style={{display:"flex", position: "relative"}}>
           <div className={styles.title}>2048</div>
           <div className={styles.scores}>
             <div className={styles.scoreBox}>
               <div className="label">Score</div>
-              <div>{score}</div>
+              <div>
+              {scoreDelta !== 0 && showScoreDelta && (
+                  <span className={styles.scoreDelta}>+{scoreDelta}</span>
+                )}
+              </div>
+              <div>
+                {score}
+              </div>
             </div>
             <div className={styles.scoreBox}>
               <div className="label">Best</div>
