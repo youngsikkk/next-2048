@@ -199,7 +199,7 @@ const Game2048 = () => {
     if (showScoreDelta) {
       const timer = setTimeout(() => {
         setShowScoreDelta(false);
-      }, 2000); // 2초 후에 애니메이션을 숨깁니다.
+      }, 1000); // 2초 후에 애니메이션을 숨깁니다.
       return () => clearTimeout(timer);
     }
   }, [showScoreDelta]);

@@ -202,7 +202,7 @@
   left: 33%;
   top:40%;
   transform: translateX(-50%);
-  animation: fadeMove .7s forwards;
+  animation: fadeMove 1s forwards;
 }
 
 @keyframes fadeMove {
