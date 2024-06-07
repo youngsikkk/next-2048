@@ -1,7 +1,5 @@
 .gameContainer {
   display: grid;
-  grid-template-columns: repeat(4, 80px);
-  grid-template-rows: repeat(4, 80px);
   gap: 5px;
   position: relative;
   justify-items: center;
@@ -67,6 +65,20 @@
   cursor: pointer;
   margin-top: 10px;
   align-self: flex-end;
+}
+
+.sizeSelector {
+  background-color: #8f7a66;
+  color: #f9f6f2;
+  border: none;
+  padding: 10px;
+  font-size: 18px;
+  font-weight: bold;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 10px;
+  align-self: flex-end;
+  margin-left: 10px;
 }
 
 .row {

@@ -1,13 +1,11 @@
 "use client"
 import React, { useState, useEffect, useRef } from 'react';
+import isEqual from 'lodash/isEqual';
 import styles from './Game2048.module.css';
 
 const Game2048 = () => {
-  const [board, setBoard] = useState([
-    [0, 0, 0, 0],
-    [0, 0, 0, 0],
-    [0, 0, 0, 0],
-  ]);
+  const [boardSize, setBoardSize] = useState(4); // 추가된 상태 변수
+  const [board, setBoard] = useState([]);
   const [score, setScore] = useState(0);
   const [highScore, setHighScore] = useState(0);
   const [scoreDelta, setScoreDelta] = useState(0);
@@ -21,8 +19,8 @@ const Game2048 = () => {
     if (savedHighScore) {
       setHighScore(parseInt(savedHighScore, 10));
     }
-    initializeGame();
-  }, []);
+    initializeGame(boardSize);
+  }, [boardSize]);
 
   const saveHighScore = (score) => {
     if (score > highScore) {
@@ -56,13 +54,8 @@ const Game2048 = () => {
     return newBoard;
   };
 
-  const initializeGame = () => {
-    let newBoard = [
-      [0, 0, 0, 0],
-      [0, 0, 0, 0],
-      [0, 0, 0, 0],
-      [0, 0, 0, 0],
-    ];
+  const initializeGame = (size) => {
+    let newBoard = Array(size).fill().map(() => Array(size).fill(0));
     const initialNumbers = Math.floor(Math.random() * 3) + 1; // 1에서 3 사이의 숫자
     for (let i = 0; i < initialNumbers; i++) {
       newBoard = addRandomNumber(newBoard);
@@ -101,7 +94,7 @@ const Game2048 = () => {
         }
       }
       const filteredRow = newRow.filter(cell => cell !== 0);
-      return [...filteredRow, ...Array(4 - filteredRow.length).fill(0)];
+      return [...filteredRow, ...Array(boardSize - filteredRow.length).fill(0)];
     });
     setScore(newScore);
     setScoreDelta(delta); // 상태 업데이트
@@ -131,7 +124,7 @@ const Game2048 = () => {
         }
       }
       const filteredRow = newRow.filter(cell => cell !== 0);
-      return [...Array(4 - filteredRow.length).fill(0), ...filteredRow];
+      return [...Array(boardSize - filteredRow.length).fill(0), ...filteredRow];
     });
     setScore(newScore);
     setScoreDelta(delta); // 상태 업데이트
@@ -157,11 +150,11 @@ const Game2048 = () => {
 
   const isGameOver = (board) => {
     const canMove = (board) => {
-      for (let row = 0; row < 4; row++) {
-        for (let col = 0; col < 4; col++) {
+      for (let row = 0; row < boardSize; row++) {
+        for (let col = 0; col < boardSize; col++) {
           if (board[row][col] === 0) return true;
-          if (col < 3 && board[row][col] === board[row][col + 1]) return true;
-          if (row < 3 && board[row][col] === board[row + 1][col]) return true;
+          if (col < boardSize - 1 && board[row][col] === board[row][col + 1]) return true;
+          if (row < boardSize - 1 && board[row][col] === board[row + 1][col]) return true;
         }
       }
       return false;
@@ -177,21 +170,25 @@ const Game2048 = () => {
     let newBoard;
     switch (event.key) {
       case 'ArrowLeft':
+        event.preventDefault();
         newBoard = moveLeft(board);
         break;
       case 'ArrowRight':
+        event.preventDefault();
         newBoard = moveRight(board);
         break;
       case 'ArrowUp':
+        event.preventDefault();
         newBoard = moveUp(board);
         break;
       case 'ArrowDown':
+        event.preventDefault();
         newBoard = moveDown(board);
         break;
       default:
         return;
     }
-    if (JSON.stringify(newBoard) !== JSON.stringify(board)) {
+    if (!isEqual(newBoard, board)) {
       const updatedBoard = addRandomNumber(newBoard);
       setBoard(updatedBoard);
       isGameOver(updatedBoard);
@@ -223,7 +220,7 @@ const Game2048 = () => {
             <div className={styles.scoreBox}>
               <div className="label">Score</div>
               <div>
-              {scoreDelta !== 0 && showScoreDelta && (
+                {scoreDelta !== 0 && showScoreDelta && (
                   <span className={styles.scoreDelta}>+{scoreDelta}</span>
                 )}
               </div>
@@ -237,9 +234,19 @@ const Game2048 = () => {
             </div>
           </div>
         </div>
-        <button onClick={initializeGame} className={styles.newGameButton}>New Game</button>
+        <button onClick={() => initializeGame(boardSize)} className={styles.newGameButton}>New Game</button>
+        <select onChange={(e) => setBoardSize(parseInt(e.target.value))} value={boardSize} className={styles.sizeSelector}>
+          <option value={4}>4x4</option>
+          <option value={5}>5x5</option>
+          <option value={6}>6x6</option>
+          <option value={7}>7x7</option>
+          <option value={8}>8x8</option>
+        </select>
       </div>
-      <div className={styles.gameContainer}>
+      <div className={styles.gameContainer} style={{ 
+        gridTemplateColumns: `repeat(${boardSize}, 80px)`,
+        gridTemplateRows: `repeat(${boardSize}, 80px)`
+      }}>
         {board.map((row, rowIndex) => (
           <div key={rowIndex} className={styles.row}>
             {row.map((cell, cellIndex) => (
@@ -252,13 +259,13 @@ const Game2048 = () => {
         {gameOver && (
           <div className={styles.gameOver}>
             <div>Game Over</div>
-            <button onClick={initializeGame} className={styles.retryButton}>Retry</button>
+            <button onClick={() => initializeGame(boardSize)} className={styles.retryButton}>Retry</button>
           </div>
         )}
         {gameSuccess && (
           <div className={styles.gameSuccess}>
             <div>Congratulations! You made 2048!</div>
-            <button onClick={initializeGame} className={styles.newGameSuccessButton}>New Game</button>
+            <button onClick={() => initializeGame(boardSize)} className={styles.newGameSuccessButton}>New Game</button>
             <button onClick={() => setGameSuccess(false)} className={styles.continueButton}>Continue</button>
           </div>
         )}
